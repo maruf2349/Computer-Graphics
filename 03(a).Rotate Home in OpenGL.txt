@@ -1,0 +1,138 @@
+#include <GL/gl.h>
+#include <GL/glut.h>
+//Initializes 3D rendering
+void initRendering() {
+glEnable(GL_DEPTH_TEST);
+glEnable(GL_COLOR_MATERIAL); //Enable color
+glClearColor(0.5f, 5.5f, 0.5f, 0.5f); //Change the background to sky blue
+}
+//Called when the window is resized
+void handleResize(int w, int h) {
+glViewport(0, 0, w, h);
+glMatrixMode(GL_PROJECTION);
+glLoadIdentity();
+gluPerspective(133.0, (double)w / (double)h, 1.0, 200.0);
+}
+float _angle = 20.0f;
+float _cameraAngle = 30.0f;
+//Draws the 3D scene
+void drawScene() {
+glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+glMatrixMode(GL_MODELVIEW);
+glLoadIdentity();
+glRotatef(-_cameraAngle, 0.0f, 1.0f, 0.0f);
+glTranslatef(0.0f, 0.0f, -9.0f);
+glPushMatrix();
+glTranslatef(0.0f, -1.0f, 0.0f);
+glRotatef(_angle, 0.0f, 0.0f, -1.0f);
+
+
+
+glClear (GL_COLOR_BUFFER_BIT);
+
+glColor3f (1.0, 1.0, 1.0);
+
+
+	glBegin(GL_QUADS); //Begin quadrilateral coordinates
+
+	//Trapezoid
+
+	glColor3f (0.5, 1., 3.9);
+	glVertex3f(0.0f, 0.0f, 0.0f);
+	glVertex3f(15.0f, 0.0f, 0.0f);
+	glVertex3f(15.0f, 10.0f, 0.0f);
+    glVertex3f(0.0f, 10.0f, 0.0f);
+
+
+//window1 Top Left
+    glColor3f (1.0, 0.0, 0.0);
+    glVertex3f(1.0f, 6.5f, 0.0f);
+	glVertex3f(4.0f, 6.5f, 0.0f);
+	glVertex3f(4.0f, 7.0f, 0.0f);
+    glVertex3f(1.0f, 7.0f, 0.0f);
+//window1 Bottom Left
+    glColor3f (1.0, 0.0, 0.0);
+    glVertex3f(1.0f, 3.0f, 0.0f);
+	glVertex3f(4.0f, 3.0f, 0.0f);
+	glVertex3f(4.0f, 6.0f, 0.0f);
+    glVertex3f(1.0f, 6.0f, 0.0f);
+
+
+
+//window2 Top Right
+    glColor3f (1.0, 0.0, 0.0);
+
+    glVertex3f(11.0f, 6.5f, 0.0f);
+	glVertex3f(14.0f, 6.5f, 0.0f);
+	glVertex3f(14.0f, 7.0f, 0.0f);
+    glVertex3f(11.0f, 7.0f, 0.0f);
+
+//window2 Right
+    glColor3f (1.0, 0.0, 0.0);
+
+    glVertex3f(11.0f, 3.0f, 0.0f);
+	glVertex3f(14.0f, 3.0f, 0.0f);
+	glVertex3f(14.0f, 6.0f, 0.0f);
+    glVertex3f(11.0f, 6.0f, 0.0f);
+
+//Door
+    glColor3f (1.0, 0.0, 2.0);
+    glVertex3f(5.5f, 0.0f, 0.0f);
+	glVertex3f(9.5f, 0.0f, 0.0f);
+	glVertex3f(9.5f, 7.0f, 0.0f);
+    glVertex3f(5.5f, 7.0f, 0.0f);
+
+
+    //floor
+
+    glColor3f (0.0, 0.5, 9.0);
+    glVertex3f(0.0f, 0.0f, 0.0f);
+	glVertex3f(-1.0f, -1.0f, 0.0f);
+	glVertex3f(16.0f, -1.0f, 0.0f);
+    glVertex3f(15.0f, 0.0f, 0.0f);
+
+
+	glEnd(); //End quadrilateral coordinates
+
+
+
+glBegin(GL_TRIANGLES);
+glColor3f(0.0f, 1.0f, 0.0f);
+glEnd();
+glBegin(GL_TRIANGLES);
+
+
+
+//Triangle
+
+    glColor3f (0.0, 0.5, 9.0);
+	glVertex3f(0.0f, 10.0f, 0.0f);
+	glVertex3f(15.0f, 10.0f, 0.0f);
+	glVertex3f(7.5f, 16.0f, 0.0f);
+glEnd();
+glPopMatrix();
+glutSwapBuffers();
+}
+void update(int value) {
+_angle += 3.0f;
+if (_angle > 360) {
+_angle -= 360;
+}
+glutPostRedisplay(); ////Tell GLUT that the scene has changed
+glutTimerFunc(30, update, 0);
+}
+int main(int argc, char** argv) {
+//Initialize GLUT
+glutInit(&argc, argv);
+glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+glutInitWindowSize(900, 900);
+//Create the window
+glutCreateWindow("Color");
+initRendering();
+//Set handler functions
+glutDisplayFunc(drawScene);
+glutReshapeFunc(handleResize);
+glutTimerFunc(25, update, 0); //Add a timer
+glutMainLoop();
+return 0;
+}
